@@ -25,3 +25,24 @@ create schema with query in graphql/Schema/Schema.js
 with a fakedatabase
 
 import graphqlHTTP and schema in index.js and create graphql middleware
+
+add mutation in schema.js
+
+test mutation with :
+```
+mutation {
+  createTodo(id: 4, content: "test") {
+    id
+  }
+}
+```
+
+query all with :
+```
+query {
+  todo {
+    id,
+    content
+  }
+}
+```

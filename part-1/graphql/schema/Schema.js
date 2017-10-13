@@ -30,12 +30,35 @@ const query = new graphql.GraphQLObjectType({
       resolve: (_, {id}) => {
         if (id)
           return [fakeDatabase[id]]
-        return Object.values(fakeDatabase);
+        return Object.values(fakeDatabase)
+      }
+    }
+  }
+})
+
+const mutation = new graphql.GraphQLObjectType({
+  name: 'TodoMutation',
+  fields: {
+    createTodo: {
+      type: new graphql.GraphQLList(TodoType),
+      args: {
+        id: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLInt)
+        },
+        content: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        }
+      },
+      resolve: (_, {id, content}) => {
+        const newTodo = new Todo(id, content)
+        fakeDatabase[id] = newTodo
+        return Object.values(fakeDatabase)
       }
     }
   }
 })
 
 module.exports = new graphql.GraphQLSchema({
-  query
+  query,
+  mutation
 })
