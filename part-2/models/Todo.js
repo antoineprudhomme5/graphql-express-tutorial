@@ -1,17 +1,9 @@
-class Todo {
-  /**
-   * Todo constructor
-   * @param  {String}  content      Text that describes the task to do
-   * @param  {Boolean} [done=false] True if the task is done
-   */
-  constructor(content, done=false) {
-    this.id = ++Todo.counter;
-    this.content = content;
-    this.done = done;
-  }
-}
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-// counter of instances
-Todo.counter = 0;
+const todoSchema = new Schema({
+  content: String,
+  done: Boolean
+})
 
-module.exports = Todo;
+module.exports = mongoose.model('Todo', todoSchema)
