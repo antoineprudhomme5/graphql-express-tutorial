@@ -54,6 +54,30 @@ const mutation = new graphql.GraphQLObjectType({
         fakeDatabase[id] = newTodo
         return Object.values(fakeDatabase)
       }
+    },
+    checkTodo: {
+      type: new graphql.GraphQLList(TodoType),
+      args: {
+        id: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLInt)
+        }
+      },
+      resolve: (_, {id}) => {
+        fakeDatabase[id].done = true;
+        return Object.values(fakeDatabase)
+      }
+    },
+    deleteTodo: {
+      type: new graphql.GraphQLList(TodoType),
+      args: {
+        id: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLInt)
+        }
+      },
+      resolve: (_, {id}) => {
+        delete fakeDatabase[id];
+        return Object.values(fakeDatabase)
+      }
     }
   }
 })
