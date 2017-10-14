@@ -1,12 +1,15 @@
 const graphql = require('graphql')
 const Todo = require('../../models/Todo')
 
-const fakeDatabase = {
-  1: new Todo(1, "Buy some beer"),
-  2: new Todo(2, "Buy some pizza"),
-  3: new Todo(3, "Learn GraphQL")
-}
+const fakeDatabase = {};
 
+// fill the fakeDatabase with some todos
+(function() {
+  const todos = ["Buy some beer", "Buy some pizza", "Learn GraphQL"];
+  todos.map(todo => fakeDatabase[Todo.counter] = new Todo(todo));
+})()
+
+// define the Todo type for graphql
 const TodoType = new graphql.GraphQLObjectType({
   name: 'todo',
   description: 'a todo item',
@@ -17,6 +20,7 @@ const TodoType = new graphql.GraphQLObjectType({
   }
 })
 
+// define the queries of the graphql Schema
 const query = new graphql.GraphQLObjectType({
   name: 'TodoQuery',
   fields: {
@@ -29,30 +33,28 @@ const query = new graphql.GraphQLObjectType({
       },
       resolve: (_, {id}) => {
         if (id)
-          return [fakeDatabase[id]]
-        return Object.values(fakeDatabase)
+          return [fakeDatabase[id]];
+        return Object.values(fakeDatabase);
       }
     }
   }
 })
 
+// define the mutations of the graphql Schema
 const mutation = new graphql.GraphQLObjectType({
   name: 'TodoMutation',
   fields: {
     createTodo: {
       type: new graphql.GraphQLList(TodoType),
       args: {
-        id: {
-          type: new graphql.GraphQLNonNull(graphql.GraphQLInt)
-        },
         content: {
           type: new graphql.GraphQLNonNull(graphql.GraphQLString)
         }
       },
-      resolve: (_, {id, content}) => {
-        const newTodo = new Todo(id, content)
-        fakeDatabase[id] = newTodo
-        return Object.values(fakeDatabase)
+      resolve: (_, {content}) => {
+        const newTodo = new Todo(content);
+        fakeDatabase[newTodo.id] = newTodo;
+        return Object.values(fakeDatabase);
       }
     },
     checkTodo: {
@@ -64,7 +66,7 @@ const mutation = new graphql.GraphQLObjectType({
       },
       resolve: (_, {id}) => {
         fakeDatabase[id].done = true;
-        return Object.values(fakeDatabase)
+        return Object.values(fakeDatabase);
       }
     },
     deleteTodo: {
@@ -76,12 +78,13 @@ const mutation = new graphql.GraphQLObjectType({
       },
       resolve: (_, {id}) => {
         delete fakeDatabase[id];
-        return Object.values(fakeDatabase)
+        return Object.values(fakeDatabase);
       }
     }
   }
 })
 
+// create and exports the graphql Schema
 module.exports = new graphql.GraphQLSchema({
   query,
   mutation

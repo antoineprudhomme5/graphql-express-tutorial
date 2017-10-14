@@ -26,7 +26,7 @@ with a fakedatabase
 
 import graphqlHTTP and schema in index.js and create graphql middleware
 
-add mutation in schema.js
+add mutations in schema.js
 
 test mutation with :
 ```
@@ -46,3 +46,9 @@ query {
   }
 }
 ```
+
+now we can :
+- get all / one todo
+- create a todo
+- check a todo when it's done
+- delete a todo
