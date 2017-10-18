@@ -210,9 +210,38 @@ const schema = require('./graphql/schema/Schema')
 ```  
 
 and add this middleware
+
 ```
 app.use('/graphql', graphqlHTTP({
   schema,
   graphiql: true
 }))
+```
+
+We set `graphiql` to true in order to active Graphiql. It's a graphical interface that allow us to interact easily with our API. So it's perfect to test what we did.
+
+Run `npm start` and go to `http://localhost:3000/graphql`. If all is ok, you should see the graphiql interface.
+
+Query all todo with all fields :
+
+```
+query {
+    todo {
+        id,
+        content,
+        done
+    }
+}
+```
+
+Query a todo by id, with all fields :
+
+```
+query {
+    todo(id: 3) {
+        id,
+        content,
+        done
+    }
+}
 ```

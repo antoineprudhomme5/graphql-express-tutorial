@@ -33,7 +33,7 @@ const query = new graphql.GraphQLObjectType({
       },
       resolve: (_, {id}) => {
         if (id)
-          return [fakeDatabase[id]];
+          return [fakeDatabase[id-1]];
         return Object.values(fakeDatabase);
       }
     }
