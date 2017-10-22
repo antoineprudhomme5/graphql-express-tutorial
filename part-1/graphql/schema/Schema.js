@@ -6,7 +6,10 @@ const fakeDatabase = {};
 // fill the fakeDatabase with some todos
 (function() {
   const todos = ["Buy some beer", "Buy some pizza", "Learn GraphQL"];
-  todos.map(todo => fakeDatabase[Todo.counter] = new Todo(todo));
+  todos.map(todo => {
+    const newTodo = new Todo(todo);
+    fakeDatabase[newTodo.id] = newTodo
+  });
 })()
 
 // define the Todo type for graphql
@@ -33,7 +36,7 @@ const query = new graphql.GraphQLObjectType({
       },
       resolve: (_, {id}) => {
         if (id)
-          return [fakeDatabase[id-1]];
+          return [fakeDatabase[id]];
         return Object.values(fakeDatabase);
       }
     }
