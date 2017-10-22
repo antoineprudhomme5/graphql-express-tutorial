@@ -1,32 +1,30 @@
-# Setup Graphql with express.js [part 1]
+# Setup GraphQL with Express.js [part 1]
 
-image = schema ?
+After hearing about GraphQL during many months, I've decided to try it. GraphQL is just an API query language, it's not specific to any database or language, so I've decided to use it with Express.js, because I like it and it's really simple.
 
-After hearing about Graphql during many months, I've decided to try it. Graphql is just an API query language, it's not specific to any database or language, so I've decided to use it with Express.js, because I like it and it's really simple.
-
-The documentation of GraphQL is really good, but it's not specific to any language and I didn't found complete exemples of GraphQL with express.js during my learning. So I've decided to write this article to help people who are interested to use graphql with express.js.
+The documentation of GraphQL is really good, but it's not specific to any language and I didn't found complete exemples of GraphQL with Express during my learning. So I've decided to write this article to help people who are interested to use GraphQL with Express.
 
 **What are we going to do?**
 
-I will not change the tradition, we are going to create a simple todolist !
+I will not change the tradition, we are going to create a simple Todo list !
 
-There will be only one model, called Todo, which will be a task on the todolist.
+There will be only one model, called Todo, which will be a task on the Todo list.
 A Todo has 3 attributes :
 - id: to identify uniquely each Todo
 - content: the task's description
 - done: a boolean that is true if the task has been completed
 
-To make things simple, there will be no database in this article. Instead, we will use an object as a fake database. I will write a second article to show you how to use this code with a database.
+To keep things simple, there will be no database in this article. Instead, we will use an object as a fake database. I will write a second article to show you how to use this code with a database.
 
 You can find the code [here on my github](https://github.com/prudywsh/graphql-test/tree/master/part-1) :)
 
-## Fresh install of express.js
+## Fresh install of Express.js
 
-Before starting to play with GraphQL, we need to setup an express.js server. So let's do it !
+Before starting to play with GraphQL, we need to setup an Express server. So let's do it !
 
 First of all, make sure you have [Node.js](https://nodejs.org/en/) installed on your computer.
 
-Open a terminal, go into your favorite folder, and create a new repository for this project (the name of the repository doesn't matter, but don't name it *"graphql"* because there will be a conflict with the graphql package).
+Open a terminal, go into your favorite folder, and create a new repository for this project (the name of the repository doesn't matter, but don't name it the same as one of the package).
 
 Go into this new repository and run the following command to init the node project:
 
@@ -36,15 +34,13 @@ npm init
 
 Answers the few questions. When you'll be done, a package.json file that describes your project will be created.
 
-Now, you are ready to install Express.js :
+Now, you are ready to install Express :
 
 ```
 npm install --save express
 ```
 
-Now, we have all we need to setup our server.
-
-Create a new file, called index.js, and add the following code in it:
+We have all we need to setup our server. Create a new file, called index.js, and add the following code in it:
 
 ```
 const express = require('express')
@@ -91,8 +87,8 @@ Before all, we need to install the following dependencies:
 npm install --save graphql express-graphql
 ```
 
-- graphql is the JavaScript reference implementation for GraphQL
-- express-graphql to mount a graphql API
+- **graphql** is the JavaScript reference implementation for GraphQL
+- **express-graphql** to mount a graphql API
 
 ### The Todo model
 
@@ -138,7 +134,7 @@ Queries are used to fetch data from your GraphQL API. In our case, we only need 
 
 Mutations are used to change data on our server. So we will use mutations in order to create, delete or update a Todo.
 
-Queries and mutations are used to fetch and change our data, but we can't directly manipulate our Todo instances. We have to create a graphql Todo type, which contains only the fields that can be requested.  
+Queries and mutations are used to fetch and change our data, but we can't directly manipulate our Todo instances. We have to create a GraphQL Todo type, which contains only the fields that can be requested.  
 
 We also need to create our fake database. For this example, we will do it in the same file as our GraphQL schema. So let's create this schema and add our database in it.
 
@@ -161,11 +157,11 @@ const fakeDatabase = {};
 We use a self-invoking function to fill our fake database with some Todo, using the class we've created before.
 Now, each time we will run our server, our fakeDatabase object will contains 3 Todos.
 
-Next step: define the graphql Todo type.
+Next step: define the GraphQL Todo type.
 
-#### Create the Todo type
+#### Define the Todo type
 
-Import graphql at the top of the file
+Import GraphQL at the top of the file
 `const graphql = require('graphql')`
 
 and put this code at the end of the file :
@@ -185,7 +181,7 @@ const TodoType = new graphql.GraphQLObjectType({
 
 In our case, the fields are the same as those in our Todo model.
 
-#### Create the Query type
+#### Define the Query type
 
 ```
 // define the queries of the graphql Schema
@@ -209,28 +205,28 @@ const query = new graphql.GraphQLObjectType({
 })
 ```
 
-In the code below, we create a new Type, that's looks similar to the Todo type we've created before. But, in fact, this type his special, like the mutation type we are going to create after.
+In the code below, we create a new type, that's looks similar to the Todo type we've created before. But, in fact, this type his special, like the mutation type we are going to create after.
 
-These two types define the entry point of every Graphql query.
+These two types (query and mutation) contains the endpoints of our GraphQL API.
 
 If you look carefully at the code, you can see that we have only one field, called todo. This field has:
 - a type: what is returned when query this field
 - args: arguments we can pass when querying this type
 - a resolve method: where we do the treatment of the request and return the response
 
-#### export the schema
+#### Export the schema
 
-We need to add some code to exports our schema, at the end of the file :
+We need to add some code to export our schema, at the end of the file :
 ```
-// create and exports the graphql Schema
+// creates and exports the GraphQL Schema
 module.exports = new graphql.GraphQLSchema({
   query
 })
 ```
 
-#### create the graphql endpoint
+#### Create the GraphQL endpoint
 
-Ok, so we have a simple graphql Schema with a Todo graphql type based on our Todo class, that we can query.
+Ok, so we have a simple GraphQL schema with a Todo type based on our Todo class, that we can query.
 But our server can only return "Hello world!" for the moment. So let's add these lines in our index.js and we are good to try the query.
 
 In index.js, import express-graphql and our schema:
@@ -248,13 +244,13 @@ app.use('/graphql', graphqlHTTP({
 }))
 ```
 
-We set `graphiql` to true in order to activate Graphiql. It's a graphical interface that allow us to interact easily with our API. So it's perfect to test what we did.
+We set `graphiql` to true in order to activate GraphiQL. It's a graphical interface that allow us to interact easily with our API. So it's perfect to test what we did.
 
-#### let's test our query
+#### Let's test our query
 
-Run `npm start` and go to `http://localhost:3000/graphql`. If all is ok, you should see the graphiql interface.
+Run `npm start` and go to `http://localhost:3000/graphql`. If all is ok, you should see the GraphiQL interface.
 
-Query all todo with all fields :
+Query all Todo with all fields :
 
 ```
 query {
@@ -266,7 +262,7 @@ query {
 }
 ```
 
-Query a todo by id, with all fields :
+Query a Todo by id, with all fields :
 
 ```
 query {
@@ -278,9 +274,7 @@ query {
 }
 ```
 
-#### Create the mutations
-
-Last thing we need to do: add mutations !
+#### Define the mutations
 
 Go back to `Schema.js`, and add the following code:
 
@@ -335,18 +329,18 @@ That's a lot of code, but it's really similar to the code of the query type. The
 - checkTodo: given the id of a todo, the mutation set the done attribute of this todo to true
 - deleteTodo: given the id of a todo, delete this todo
 
-Add the mutation type in the exports of our schema:
+Add the mutation type in the export of our schema:
 ```
-// create and exports the graphql Schema
+// creates and exports the graphql Schema
 module.exports = new graphql.GraphQLSchema({
   query,
   mutation
 })
 ```
 
-And we are done, we have all we need. Let's try the mutations !
+And we are done, we have all we need !
 
-#### let's test our mutations
+#### Let's test our mutations
 
 Create a new todo:
 ```
@@ -382,5 +376,6 @@ mutation {
 ```
 
 Congratulation ! You just wrote a GraphQL server to manage your todolist !
-You now know how to build a simple graphql crud API with express.js.
+You now know how to build a simple QraphQL crud API with Express.js.
+
 In the next part, I will show you how to replace the fake database we've used in this article by a real database.
