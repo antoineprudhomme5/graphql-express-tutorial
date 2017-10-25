@@ -93,7 +93,27 @@ As you can see, we use our environnement variables for the connection.
 
 ## Replace the fakeDatabase
 
+Our server is connected to a real database. So let's change our code to use the real database instead of our fake database.
+
 ### From ES6 class to Mongoose schema
+
+We will start to refactor our Todo model. Remove the old code of our model and put this one instead.
+
+```
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+
+const todoSchema = new Schema({
+  content: String,
+  done: Boolean
+})
+
+module.exports = mongoose.model('Todo', todoSchema)
+```
+
+Our ES6 class is replaced by a mongoose Schema. Then, we create the Todo model from this schema and export it.
+
+*Note that there is no 'id' attribute in the schema. If fact, any mongodb document has a _id attribute which is unique. So we will use it instead of creating our own 'id' field. But it's important to remember that the field is now '_id', not 'id' and that '_id' is a string, not an integer like 'id'*
 
 ### rewrite resolve methods
 
