@@ -8,8 +8,8 @@ const app = express()
 const schema = require('./graphql/schema/Schema')
 
 // connect to mongodb
-mongoose.connect('mongodb://localhost:27017/graphql')
-mongoose.connection.on('error', _ => console.error('FAILED to connect to mongoose'))
+mongoose.connect(`mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`)
+mongoose.connection.on('error', err => console.error('FAILED to connect to mongoose', err))
 mongoose.connection.once('open', _ => console.log('Connected to mongoose'))
 
 app.use('/graphql', graphqlHTTP({

@@ -16,21 +16,80 @@ You can find the code [here, on my github](https://github.com/prudywsh/graphql-e
 
 ## Prepare the ground
 
+Before getting to the heart of the matter, let's do some preliminary work, so we don't have to thing about these things later.
+
 ### Install the new dependencies
 
+First of all, install the new dependencies we need to connect our server to a MongoDB database.
+
+```
+npm install --save mongoose dotenv
+```
+
+- **mongoose** is a MongoDB ORM (maybe the most famous)
+- **dotenv** is a module that load environnement variables from a .env file at the root of our project into the process.env object.
+
 ### Create the .env file
+
+At the root of the project, create a new file called **.env**. As I said in the dependencies installation just before, the variables we put in this file will be loaded in process.env.
+
+But what do we want to put in this file ?
+Our database connection's variables !
+
+But why do we want to do that ?
+It's a good practice ! If you want to share your code with someone, you don't want this guy to have your database login and password, and you don't want go through your code to clean each value that belongs to your environnement ... So one solution is to create a *.env* file, that you don't send to the guy you want to share your code with. Instead, you can send him a *.env.example* file with the variables but without the values, like I did for this code (check the github repo), so the guy who want to try my code just have to fill the file with his values.
+
+For the mongodb connection, we need 2 things:
+- the database's host, we will call this variable **DB_HOST**
+- the database's name, we will call this variable **DB_NAME**
+
+Here is the content of my .env file on my computer :
+
+```
+DB_HOST=localhost:27017
+DB_NAME=todolist
+```
+
+If you are using mongodb locally wth the default settings, your DB_HOST is the same as me.
+For the DB_NAME, we doesn't created the database yet, so we will change it later.
 
 ## Set up mongoose
 
 ### Create the database
 
-install Mongodb
+If you don't have mongodb on your computer, [you must install it](https://www.mongodb.com/). (Else, it will be complicated to run this code :)).
 
-create a new database
+*If you want a GUI to manage your MongoDB database, you can take a look at [Robomongo](https://robomongo.org/)*
 
-+ speak about robomongo
+Now we have to create a database for this project.
+
+- open a terminal
+- run `mongo` to open the mongodb shell
+- run `use DB_NAME` where DB_NAME is the name of your database
+
+**dont forget to change the value of DB_NAME in your .env with the value you choose !**
 
 ### Connection to mongodb
+
+The connection to our database will be done in **index.js**.
+
+The first thing to do is to load our environnement file, so we can access the variables in process.env. We also have to import mongoose, because it's the module that will help us to interact with our MongoDB database.
+
+At the top of the file, put theses lines:
+
+```
+require('dotenv').config()
+const mongoose = require('mongoose')
+```
+
+Now, we can do the connection to our database. Simply add these lines under the modules's imports.
+
+```
+// connect to mongodb
+mongoose.connect(`mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`)
+```
+
+As you can see, we use our environnement variables for the connection.
 
 ## Replace the fakeDatabase
 
