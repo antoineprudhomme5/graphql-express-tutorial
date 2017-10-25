@@ -115,6 +115,22 @@ Our ES6 class is replaced by a mongoose Schema. Then, we create the Todo model f
 
 *Note that there is no 'id' attribute in the schema. If fact, any mongodb document has a _id attribute which is unique. So we will use it instead of creating our own 'id' field. But it's important to remember that the field is now '_id', not 'id' and that '_id' is a string, not an integer like 'id'*
 
+We change our model, but as I said in the part 1, we doesn't query directly our model, but a GraphQL type. The 'id' attribute has been replaced by the '\_id' attribute, so we have to update or graphql schema.
+
+In **Schema.js**, in the TodoType's fields attribute, replace
+
+```
+id: {type: graphql.GraphQLInt},
+```
+
+with
+
+```
+\_id: {type: graphql.GraphQLString},
+```
+
+*So now, to query by id, we will use '\_id' as key and a string as value.*
+
 ### rewrite resolve methods
 
 
