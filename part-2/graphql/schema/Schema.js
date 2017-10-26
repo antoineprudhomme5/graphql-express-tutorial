@@ -25,11 +25,7 @@ const query = new graphql.GraphQLObjectType({
       },
       resolve: (_, {_id}) => {
         where = _id ? {_id} : {};
-        return new Promise((resolve, reject) => {
-          Todo.find(where)
-            .then(data => resolve(data))
-            .catch(err => reject(err))
-        })
+        return Todo.find(where)
       }
     }
   }
@@ -47,12 +43,8 @@ const mutation = new graphql.GraphQLObjectType({
         }
       },
       resolve: (_, {content}) => {
-        return new Promise((resolve, reject) => {
-          const newTodo = new Todo({content, done: false});
-          newTodo.save()
-            .then(todo => resolve(todo))
-            .catch(err => reject(err))
-        })
+        const newTodo = new Todo({content, done: false});
+        return newTodo.save()
       }
     },
     checkTodo: {
@@ -82,11 +74,7 @@ const mutation = new graphql.GraphQLObjectType({
         }
       },
       resolve: (_, {_id}) => {
-        return new Promise((resolve, reject) => {
-          Todo.findOneAndRemove(_id)
-            .then(todo => resolve(todo))
-            .catch(err => reject(err))
-        })
+        return Todo.findOneAndRemove(_id)
       }
     }
   }

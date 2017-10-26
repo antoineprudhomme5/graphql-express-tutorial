@@ -133,6 +133,12 @@ with
 
 ### rewrite resolve methods
 
+With Grahql-express, we can return promises in resolve methods, and that's awesome, because a lot of mongoose queries return promises ! So except the cases where we have to do more than a simple query, we can directly return the mongoose query !
+
+### remove the fakeDatabase
+
+The fakeDatabase object and the self-invoking function that fill the database are now become useless, we can remove them to clean our code.
+
 
 *Congratulation, we now have a real database to manage or Todolist !
 You know now how to use a database with GraphQL.*
