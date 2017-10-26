@@ -55,15 +55,11 @@ const mutation = new graphql.GraphQLObjectType({
         }
       },
       resolve: (_, {_id}) => {
-        return new Promise((resolve, reject) => {
-          Todo.findById(_id)
-            .then(todo => {
-              todo.done = true;
-              return todo.save();
-            })
-            .then(todo => resolve(todo))
-            .catch(err => reject(err))
-        })
+        return Todo.findById(_id)
+          .then(todo => {
+            todo.done = true;
+            return todo.save();
+          })
       }
     },
     deleteTodo: {

@@ -135,6 +135,29 @@ with
 
 With Grahql-express, we can return promises in resolve methods, and that's awesome, because a lot of mongoose queries return promises ! So except the cases where we have to do more than a simple query, we can directly return the mongoose query !
 
+We will start with the simplest resolve to update: deleteTodo. This mutation delete a Todo by id and return the deleted Todo. Mongoose has a great method to do it, which return a promise ! So the resolve method of deleteTodo is just that :
+
+```
+resolve: (_, {_id}) => {
+  return Todo.findOneAndRemove(_id)
+}
+```
+
+*Of course, if you don't want to return directly the mongoose because you want to handle the errors for example, you can encapsulate the mongoose promise in you promise. Instead of returning the mongoose's promise, you return your promise with the mongoose's promise in it.*
+
+Now, we can update the query to fetch our Todo. The only thing we have to care about is that we can pass an id to fetch only one Todo. So we have to handle both cases.
+
+```
+resolve: (_, {_id}) => {
+  where = _id ? {_id} : {};
+  return Todo.find(where)
+}
+```
+
+**Todo.find** is a Promise that return an array. If there is an id in the request, the requested Todo will the first element in this array.
+
+*Here, we return an array even if we want only one Todo. But you can separate the query in 2 queries: one for fetch all the Todos (return an array), another to fecth a Todo by id (return a Todo object)*
+
 ### remove the fakeDatabase
 
 The fakeDatabase object and the self-invoking function that fill the database are now become useless, we can remove them to clean our code.
