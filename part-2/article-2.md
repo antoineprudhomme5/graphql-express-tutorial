@@ -50,7 +50,7 @@ DB_HOST=localhost:27017
 DB_NAME=todolist
 ```
 
-If you are using mongodb locally wth the default settings, your DB_HOST is the same as me.
+If you are using mongodb locally with the default settings, your DB_HOST is the same as me.
 For the DB_NAME, we doesn't created the database yet, so we will set it later.
 
 ## Set up mongoose
@@ -146,6 +146,23 @@ resolve: (_, {_id}) => {
   return Todo.findOneAndRemove(_id)
 }
 ```
+
+We also need to update the mutation parameter:
+
+```
+args: {
+  _id: {
+    type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+  }
+},
+```
+
+And the type of return, because we return only the deleted Todo:
+
+```
+type: TodoType,
+```
+
 #### todo query
 
 The only thing we have to care about is that we can pass an id to fetch only one Todo. So we have to handle both cases.
@@ -155,6 +172,16 @@ resolve: (_, {_id}) => {
   where = _id ? {_id} : {};
   return Todo.find(where)
 }
+```
+
+Same as deleteTodo, the parameter has to be updated:
+
+```
+args: {
+  _id: {
+    type: graphql.GraphQLString
+  }
+},
 ```
 
 **Todo.find** is a Promise that return an array. If there is an id in the request, the requested Todo will the first element in the returned array.
@@ -172,6 +199,12 @@ resolve: (_, {content}) => {
 }
 ```
 
+The resolve method return a single Todo, so update the type:
+
+```
+type: TodoType
+```
+
 **save** is a Promise that return the saved Todo.
 
 #### checkTodo mutation
@@ -186,6 +219,22 @@ resolve: (_, {_id}) => {
       return todo.save();
     })
 }
+```
+
+We also need to update the mutation parameter:
+
+```
+args: {
+  _id: {
+    type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+  }
+},
+```
+
+And the type of return, because we want only the updated Todo:
+
+```
+type: TodoType,
 ```
 
 ### remove the fakeDatabase
