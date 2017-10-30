@@ -1,18 +1,24 @@
-`npm install --save mongoose dotenv`
+# GraphQL & Express.js [part 2]
 
-create .env file
-`touch .env`
+[link to the medium article](https://medium.com/@prudywsh/graphql-express-js-part-2-e6356267b96f)
 
-add DB_HOST and DB_NAME in .env
+## Requirements
 
-load .env file in index.js
+[Node.js](https://nodejs.org/en/)
+[MongoDB](https://www.mongodb.com/)
 
-import mongoose + connect to DB
+## Installation
 
-replace Todo.js class with a mongoose schema
+Install dependencies :
 
-remove fakeDatabase
+```
+npm install
+```
 
-in graphql todotype, replace type of id with GraphQLGraphQLString
+Rename **.env.example** to **.env** and set the variables with your values.
 
-rewrite resolve of each query and mutation with using mongoose
+## Start the server
+
+```
+npm start
+```
